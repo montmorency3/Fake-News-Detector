@@ -34,6 +34,7 @@ def preprocessText(text):
     text = text.lower()
 
     # Remove non-alphanumeric characters (keep spaces)
+    text = re.sub(r'[,:;\"<>@%&#.?!(){}[\]]','',text)
 
     # Tokenize and stem each word
     words = text.split()
