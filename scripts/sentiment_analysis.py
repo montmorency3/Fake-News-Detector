@@ -24,7 +24,7 @@ def score_sentiment():
   corpus = load_sentiment_corpus() 
 
   # loads dataset of interest
-  df = loadData(use_lemmatization=False)
+  df = loadData(use_lemmatization=True)
   
   # assume text is encoded as a list of words
   valence_scores = np.zeros(len(df))
