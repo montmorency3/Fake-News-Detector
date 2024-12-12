@@ -8,7 +8,7 @@ def load_sentiment_data():
 def score_sentiment(dataset):
 
   # preprocess dataset
-  text_data = 
+  text_data = preprocessText(dataset)
   
   # loads pre-evaluated sentiment data
   df = load_sentiment_data()
