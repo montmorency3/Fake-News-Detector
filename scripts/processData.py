@@ -7,17 +7,19 @@ def loadData():
     fakeData = pd.read_csv("Fake.csv")
     trueData = pd.read_csv("True.csv")
 
-    fakeData["content"] = fakeData["title"] + fakeData["text"]
-    trueData["content"] = trueData["title"] + trueData["text"]
+    fakeData["body"] = fakeData["text"].apply(preprocessText)  # The body is the text
+    trueData["body"] = trueData["text"].apply(preprocessText)  # The body is the text
+    fakeData["title"] = fakeData["title"].apply(preprocessText)  # Title remains as is
+    trueData["title"] = trueData["title"].apply(preprocessText)  # Title remains as is
 
-    fakeData["content"] = fakeData["content"].apply(preprocessText)
-    trueData["content"] = trueData["content"].apply(preprocessText)
+    # fakeData["content"] = fakeData["content"].apply(preprocessText)
+    # trueData["content"] = trueData["content"].apply(preprocessText)
 
 
     fakeData["label"] = 0
-    trueData["label"] = 0
+    trueData["label"] = 1
 
-    data = pd.concat([fakeData[['content', 'label']], trueData[['content', 'label']]])
+    data = pd.concat([fakeData[['title', 'body', 'label']], trueData[['title', 'body', 'label']]])
     return data
 
 
@@ -34,6 +36,7 @@ def preprocessText(text):
     text = text.lower()
 
     # Remove non-alphanumeric characters (keep spaces)
+    text = re.sub(r'[,:;\\/\'\"<>@%&#.?!(){}[\]]','',text)
 
     # Tokenize and stem each word
     words = text.split()
