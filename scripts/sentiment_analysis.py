@@ -35,8 +35,8 @@ def score_sentiment():
   for i in len(df):
 
     # add code here to split data entry as title vs text
-    title = df['Title'][i]
-    text = df['Text'][i]
+    title = df['title'][i]
+    text = df['body'][i]
     
     # scores main text
     sent = text.split(" ")
