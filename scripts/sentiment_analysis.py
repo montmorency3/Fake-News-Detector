@@ -1,9 +1,8 @@
 import numpy as np
 import pandas as pd
-import processData
+from processData import loadData
 
-def load_sentiment_data():
-
+def load_sentiment_corpus():
   return pd.read_csv("Sentiment_Data.csv")
 
 def score_sentence(df,sent):
@@ -19,29 +18,35 @@ def score_sentence(df,sent):
     intensity += (target['Intensity']).mean()
   return valence, intensity
     
-def score_sentiment(dataset):
+def score_sentiment():
 
+  # loads sentiment corpus
+  corpus = load_sentiment_corpus() 
+
+  # loads dataset of interest
+  df = loadData(use_lemmatization=False)
+  
   # assume text is encoded as a list of words
-  valence_scores = np.zeros(len(dataset))
-  intensity_scores = np.zeros(len(dataset))
-  title_valence = np.zeros(len(dataset))
-  title_intensity = np.zeros(len(dataset))
+  valence_scores = np.zeros(len(df))
+  intensity_scores = np.zeros(len(df))
+  title_valence = np.zeros(len(df))
+  title_intensity = np.zeros(len(df))
 
-  for i,entry in enumerate(dataset):
+  for i in len(df):
 
     # add code here to split data entry as title vs text
-    title = entry[0]
-    text = entry[1]
+    title = df['Title'][i]
+    text = df['Text'][i]
     
     # scores main text
     sent = text.split(" ")
-    valence,intensity = score_sentence(sent)
+    valence,intensity = score_sentence(corpus,sent)
     valence_scores[i] = valence
     intensity_scores[i] = intensity
 
     # scores title
     sent = title.split(" ")
-    valence,intensity = score_sentence(sent)
+    valence,intensity = score_sentence(corpus,sent)
     title_valence[i] = valence
     title_intensity[i] = intensity
 
