@@ -22,7 +22,6 @@ def loadData():
     data = pd.concat([fakeData[['title', 'body', 'label']], trueData[['title', 'body', 'label']]])
     return data
 
-
 def preprocessText(text):
     stemmer = PorterStemmer()
     """
