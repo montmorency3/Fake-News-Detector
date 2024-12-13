@@ -3,6 +3,7 @@ from nltk.corpus import stopwords
 import re
 from nltk.stem import PorterStemmer
 from nltk.stem import WordNetLemmatizer
+from collections import Counter
 
 def loadData(use_lemmatization=False):
     fakeData = pd.read_csv("Fake.csv")
@@ -51,3 +52,16 @@ def preprocessText(text, use_lemmatization=False):
         words = [stemmer.stem(word) for word in words if word not in stopwords.words('english')]
 
     # Rejoin words back in
+
+def count_punctuation(text):
+
+    count = Counter(text)
+    total = 0
+
+    # counts all punctuation symbols
+    total += count["!"]
+    total += count["?"]
+    total += count["#"]
+    total += count["@"]
+    
+    return total
