@@ -6,7 +6,8 @@ def load_sentiment_corpus():
   return pd.read_csv("Sentiment_Data.csv")
 
 def score_sentence(df,sent):
-  valence = 0
+  pos = 0
+  neg = 0
   intensity = 0
   for w in sent:
     # looks for entry in database
@@ -14,9 +15,13 @@ def score_sentence(df,sent):
     if len(target) == 0:
       continue
     # else, computes sentiment scores for new word
-    valence += (target['Valence']).mean()
+    valence = (target['Valence']).mean()
+    if valence >= 0:
+      pos += valence
+    else:
+      neg -= valence
     intensity += (target['Intensity']).mean()
-  return valence, intensity
+  return pos, neg, intensity
     
 def score_sentiment():
 
@@ -27,9 +32,11 @@ def score_sentiment():
   df = loadData(use_lemmatization=True)
   
   # assume text is encoded as a list of words
-  valence_scores = np.zeros(len(df))
+  pos_scores = np.zeros(len(df))
+  neg_scores = np.zeros(len(df))
   intensity_scores = np.zeros(len(df))
-  title_valence = np.zeros(len(df))
+  title_pos = np.zeros(len(df))
+  title_neg = np.zeros(len(df))
   title_intensity = np.zeros(len(df))
 
   for i in len(df):
@@ -40,14 +47,16 @@ def score_sentiment():
     
     # scores main text
     sent = text.split(" ")
-    valence,intensity = score_sentence(corpus,sent)
-    valence_scores[i] = valence
+    pos,neg,intensity = score_sentence(corpus,sent)
+    pos_scores[i] = pos
+    neg_scores[i] = neg
     intensity_scores[i] = intensity
 
     # scores title
     sent = title.split(" ")
-    valence,intensity = score_sentence(corpus,sent)
-    title_valence[i] = valence
+    pos,neg,intensity = score_sentence(corpus,sent)
+    title_pos[i] = pos
+    title_neg[i] = neg
     title_intensity[i] = intensity
 
   return valence_scores, intensity_scores, title_valence, title_intensity
