@@ -13,8 +13,15 @@ def count_errors(sentence):
       total += 1
   return total
 
-def spellcheck(dataset):
+def count_words(sentence):
+  return len(set(sentence)) / len(sentence)
+  
+def derive_features(dataset):
+  word_counts = np.zeros(len(dataset))
   errors = np.zeros(len(dataset))
   for i,sent in enumerate(dataset):
-    errors[i] = count_errors(sent.split(" "))
+
+    sent = sent.split(" ")
+    errors[i] = count_errors(sent) # counts misspellings
+    word_counts[i] = count_words(sent) # counts percent unique words
   return errors
