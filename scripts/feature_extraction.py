@@ -28,31 +28,40 @@ def count_words_lengths(sentence):
   return counts
 
 def count_symbols(text):
-    count = Counter(text)
-    # counts all punctuation symbols
-    punctuation = count["!"] # highly expressive
-    punctuation += count["?"]
-    tags = count["#"] # hashtags or mentions
-    tags += count["@"] 
-    citations = count["\""] / 2 # quotes
-    # counts numeric symbols
-    numeric = count['1'] + count['2'] + count['3'] + count['4'] + count['5'] + count['6'] + count['7'] + count['8'] + count['9'] + count['0']
-    return punctuation, tags, citations, numeric
+  
+  count = Counter(text)
+  # counts all punctuation symbols
+  punctuation = count["!"] # highly expressive
+  punctuation += count["?"]
+  tags = count["#"] # hashtags or mentions
+  tags += count["@"] 
+  citations = count["\""] / 2 # quotes
+  # counts numeric symbols
+  numeric = 0
+  capitals = 0
+  for c in text:
+    is c.isnumeric():
+      numeric += 1
+    elif c.isupper():
+      capitals += 1
+  return punctuation, tags, citations, numeric, capitals
   
 def derive_features(dataset):
   punctuation = np.zeros(len(dataset))
   tags = np.zeros(len(dataset))
   citations = np.zeros(len(dataset))
   numeric = np.zeros(len(dataset))
+  capitals = np.zeros(len(dataset))
   word_counts = np.zeros(len(dataset))
   errors = np.zeros(len(dataset))
   word_lengths = np.zeros((len(dataset),3))
   
   for i,sent in enumerate(dataset):
 
-    punctuation[i], tags[i], citations[i], numeric[i] = count_symbols(sent) # tracks symbol counts
+    punctuation[i], tags[i], citations[i], numeric[i], capitals[i] = count_symbols(sent) # tracks symbol counts
     
     sent = sent.split(" ")
+    capitals[i] / len(sent) # adjusts capital letters against article size
     errors[i] = count_errors(sent) # counts misspellings
     word_counts[i] = count_words(sent) # counts percent unique words
     word_lengths[i,:] = count_words_lengths(sent)
