@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 import nltk
 from nltk.corpus import words
 
@@ -54,7 +55,7 @@ def derive_features(dataset):
   capitals = np.zeros(len(dataset))
   word_counts = np.zeros(len(dataset))
   errors = np.zeros(len(dataset))
-  word_lengths = np.zeros((len(dataset),3))
+  word_lengths = np.zeros((3,len(dataset)))
   
   for i,sent in enumerate(dataset):
 
@@ -64,5 +65,21 @@ def derive_features(dataset):
     capitals[i] / len(sent) # adjusts capital letters against article size
     errors[i] = count_errors(sent) # counts misspellings
     word_counts[i] = count_words(sent) # counts percent unique words
-    word_lengths[i,:] = count_words_lengths(sent)
-  return errors
+    word_lengths[:,i] = count_words_lengths(sent)
+
+  data_dict = {'Punctuation':punctuation,
+              'Tags':tags,
+              'Citations':citations,
+              'Numeric':numeric,
+              'Capitals':capitals,
+              'Unique_Word_Prop':word_counts,
+              'Misspellings':errors,
+              'Short_Words':word_lengths[0,:],
+              'Medium_Words':word_lengths[1,:],
+              'Long_Words':word_lengths[2,:]}
+  df = pd.DataFrame(data_dict)
+  df.to_csv('Text_Dataset.csv', index=False)
+  
+  return df
+
+
