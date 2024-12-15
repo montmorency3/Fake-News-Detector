@@ -5,7 +5,10 @@ from nltk.stem import PorterStemmer
 from nltk.stem import WordNetLemmatizer
 from collections import Counter
 
-def loadData(use_lemmatization=False):
+from pandas.core.common import random_state
+from sklearn.model_selection import train_test_split
+
+def cleanData(use_lemmatization=False):
     fakeData = pd.read_csv("../dataset/Fake.csv")
     trueData = pd.read_csv("../dataset/True.csv")
 
@@ -35,10 +38,13 @@ def loadData(use_lemmatization=False):
     data = data.drop_duplicates(subset=['body'])
     data = data.drop_duplicates(subset=['title'])
 
-    # add combined title + body column
-    data['content'] = data['title'] + ' ' + data['body']
+    # split the data into train, test and validation set
+    temp_data, test_data = train_test_split(data, test_size=0.025, random_state=42)
+    train_data, val_data = train_test_split(temp_data, test_size=0.10, random_state=42)
+    test_data.to_csv('../dataset/test.csv', columns=['id', 'label', 'title', 'body'] ,index=False)
+    train_data.to_csv('../dataset/train.csv', columns=['id', 'label', 'title', 'body'], index=False)
+    val_data.to_csv('../dataset/val.csv', columns=['id', 'label', 'title', 'body'], index=False)
 
-    return data
 
 def preprocessText(text, use_lemmatization=False, from_true_article=False):
     """
@@ -74,7 +80,7 @@ def preprocessText(text, use_lemmatization=False, from_true_article=False):
     words = [word for word in words if word not in filter_words]
     words = [word for word in words if "@" not in word]
     words = [word for word in words if "https" not in word]
-
+    '''
     if use_lemmatization:
         # Lemmatization (using WordNetLemmatizer)
         lemmatizer = WordNetLemmatizer()
@@ -83,9 +89,22 @@ def preprocessText(text, use_lemmatization=False, from_true_article=False):
         # Stemming (using PorterStemmer)
         stemmer = PorterStemmer()
         words = [stemmer.stem(word) for word in words if word not in stopwords.words('english')]
-
+    '''
     # Rejoin words back in
     return " ".join(words)
+
+def loadData(use_lemmatization=True):
+    # read processed version of dataset
+    train_data = pd.read_csv("../dataset/train.csv")
+    val_data = pd.read_csv("../dataset/val.csv")
+    test_data = pd.read_csv("../dataset/test.csv")
+
+    # combine title and article text
+    train_data['content'] = train_data['title'] + ' ' + train_data['body']
+    val_data['content'] = val_data['title'] + ' ' + val_data['body']
+    test_data['content'] = test_data['title'] + ' ' + test_data['body']
+
+    return train_data, val_data, test_data
 
 def count_punctuation(text):
 
@@ -99,3 +118,7 @@ def count_punctuation(text):
     total += count["@"]
     
     return total
+
+
+if __name__ == "__main__":
+    cleanData(use_lemmatization=True)
