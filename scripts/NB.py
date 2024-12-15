@@ -6,13 +6,10 @@ from sklearn.metrics import accuracy_score, classification_report
 from sklearn.model_selection import cross_val_score
 
 
-def trainNB():
-    train_data, val_data, test_data = loadData()
+def trainNB(dataset):
 
-    X_train = train_data['content']
-    y_train = train_data["label"]
-    X_test = test_data['content']
-    y_test = test_data['label']
+    # Load Dataset
+    X_train, y_train, X_val, y_val, X_test, y_test = loadData(dataset)
 
     vectorizer = TfidfVectorizer(stop_words='english', max_features=5000)  # Adjust max_features as needed
     X_train_tfidf = vectorizer.fit_transform(X_train)
@@ -34,4 +31,5 @@ def trainNB():
 
 
 if __name__ == "__main__":
-    trainNB()
+    trainNB('ISOT')
+    trainNB('LIAR2')

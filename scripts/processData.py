@@ -1,6 +1,7 @@
 import pandas as pd
 from nltk.corpus import stopwords
 import re
+import datasets
 from nltk.stem import PorterStemmer
 from nltk.stem import WordNetLemmatizer
 from collections import Counter
@@ -98,18 +99,37 @@ def preprocessText(text, use_lemmatization=False, from_true_article=False):
     # Rejoin words back in
     return " ".join(words)
 
-def loadData(use_lemmatization=True):
-    # read processed version of dataset
-    train_data = pd.read_csv("../dataset/train.csv")
-    val_data = pd.read_csv("../dataset/val.csv")
-    test_data = pd.read_csv("../dataset/test.csv")
+def loadData(dataset, use_lemmatization=True):
+    if dataset == 'ISOT':
+        # read processed version of ISOT dataset
+        train_data = pd.read_csv("../dataset/train.csv")
+        val_data = pd.read_csv("../dataset/val.csv")
+        test_data = pd.read_csv("../dataset/test.csv")
 
-    # combine title and article text
-    train_data['content'] = train_data['title'] + ' ' + train_data['body']
-    val_data['content'] = val_data['title'] + ' ' + val_data['body']
-    test_data['content'] = test_data['title'] + ' ' + test_data['body']
+        # combine title and article text
+        train_data['content'] = train_data['title'] + ' ' + train_data['body']
+        val_data['content'] = val_data['title'] + ' ' + val_data['body']
+        test_data['content'] = test_data['title'] + ' ' + test_data['body']
+        X_train, y_train = train_data['content'], train_data["label"]
+        X_val, y_val = val_data['content'], val_data['label']
+        X_test, y_test = test_data['content'], test_data['label']
 
-    return train_data, val_data, test_data
+    elif dataset == 'LIAR2':
+        # Load LIAR2 dataset
+        dataset = "chengxuphd/liar2"
+        dataset = datasets.load_dataset(dataset)
+        X_train, y_train = dataset["train"]["statement"], dataset["train"]["label"]
+        X_val, y_val = dataset["validation"]["statement"], dataset["validation"]["label"]
+        X_test, y_test = dataset["test"]["statement"], dataset["test"]["label"]
+
+        # collapse labels (ranging from 0 to 5) into just True and False
+        y_train = [0 if x <= 2 else 1 for x in y_train]
+        y_val = [0 if x <= 2 else 1 for x in y_val]
+        y_test = [0 if x <= 2 else 1 for x in y_test]
+    else:
+        raise ValueError('Invalid Dataset')
+
+    return X_train, y_train, X_val, y_val, X_test, y_test
 
 def count_punctuation(text):
 

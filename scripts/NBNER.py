@@ -8,10 +8,12 @@ import nltk
 from nltk import ne_chunk, pos_tag, word_tokenize
 from nltk.tree import Tree
 
-# Ensure required NLTK resources are downloaded
-nltk.download('punkt')
-nltk.download('maxent_ne_chunker')
-nltk.download('words')
+# Ensure required NLTK resources are downloaded (required only once)
+#nltk.download('punkt')
+#nltk.download('maxent_ne_chunker')
+#nltk.download('words')
+#nltk.download('averaged_perceptron_tagger_eng')
+#nltk.download('maxent_ne_chunker_tab')
 
 # Function to extract named entities using NLTK
 def extract_named_entities(texts):
@@ -36,13 +38,9 @@ def extract_named_entities(texts):
     
     return entity_features
 
-def trainNB():
+def trainNB(dataset):
     # Load data
-    train_data, val_data, test_data = loadData()
-    X_train = train_data['content']
-    y_train = train_data["label"]
-    X_test = test_data['content']
-    y_test = test_data['label']
+    X_train, y_train, X_val, y_val, X_test, y_test = loadData(dataset)
 
     # Extract NER features using NLTK
     print("Extracting NER features using NLTK...")
@@ -84,4 +82,4 @@ def trainNB():
     print(f"Cross-validation mean accuracy: {scores.mean()}")
 
 if __name__ == "__main__":
-    trainNB()
+    trainNB('ISOT')
