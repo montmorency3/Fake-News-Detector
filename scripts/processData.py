@@ -5,8 +5,13 @@ from nltk.stem import PorterStemmer
 from nltk.stem import WordNetLemmatizer
 from collections import Counter
 
-from pandas.core.common import random_state
 from sklearn.model_selection import train_test_split
+
+'''
+Contains functions for preprocessing of the data, runtime is about 20-30 minutes. Results can be found in 
+train.csv, val.csv and test.csv
+'''
+
 
 def cleanData(use_lemmatization=False):
     fakeData = pd.read_csv("../dataset/Fake.csv")
@@ -68,7 +73,7 @@ def preprocessText(text, use_lemmatization=False, from_true_article=False):
     text = pattern_1.sub('', text)
     text = pattern_2.sub('', text)
 
-    # Remove non-alphanumeric characters (keep spaces)
+    # Remove non-alphanumeric characters
     text = re.sub(r'[,:;\\/\'\"<^>%&#.?!(){}[\]]','',text)
 
     # Tokenize the text
@@ -80,7 +85,7 @@ def preprocessText(text, use_lemmatization=False, from_true_article=False):
     words = [word for word in words if word not in filter_words]
     words = [word for word in words if "@" not in word]
     words = [word for word in words if "https" not in word]
-    '''
+
     if use_lemmatization:
         # Lemmatization (using WordNetLemmatizer)
         lemmatizer = WordNetLemmatizer()
@@ -89,7 +94,7 @@ def preprocessText(text, use_lemmatization=False, from_true_article=False):
         # Stemming (using PorterStemmer)
         stemmer = PorterStemmer()
         words = [stemmer.stem(word) for word in words if word not in stopwords.words('english')]
-    '''
+
     # Rejoin words back in
     return " ".join(words)
 
