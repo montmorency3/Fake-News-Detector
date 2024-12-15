@@ -38,13 +38,12 @@ def extract_named_entities(texts):
 
 def trainNB():
     # Load data
-    data = loadData()
-    X = data['content']
-    y = data["label"]
+    train_data, val_data, test_data = loadData()
+    X_train = train_data['content']
+    y_train = train_data["label"]
+    X_test = test_data['content']
+    y_test = test_data['label']
 
-    # Split data into training and test sets
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-    
     # Extract NER features using NLTK
     print("Extracting NER features using NLTK...")
     X_train_entities = extract_named_entities(X_train)
