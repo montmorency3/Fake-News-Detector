@@ -19,8 +19,8 @@ def cleanData(use_lemmatization=False):
     trueData = pd.read_csv("../dataset/True.csv")
 
     # add id column to identify articles
-    trueData["id"] = trueData['id'] = range(0, len(trueData))
-    fakeData["id"] = fakeData['id'] = range(0, len(fakeData))
+    trueData['id'] = range(0, len(trueData))
+    fakeData['id'] = range(0, len(fakeData))
 
     # Assign labels (0 for fake, 1 for true)
     fakeData["label"] = 0
@@ -75,7 +75,7 @@ def preprocessText(text, use_lemmatization=False, from_true_article=False):
     text = pattern_2.sub('', text)
 
     # Remove non-alphanumeric characters
-    text = re.sub(r'[,:;\\/\'\"<^>%&#.?!(){}[\]]','',text)
+    text = re.sub(r'[,:;\\/\'\"“”’‘<^>%&#.?!(){}[\]]','',text)
 
     # Tokenize the text
     words = text.split()
