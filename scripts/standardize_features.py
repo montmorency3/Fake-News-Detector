@@ -1,5 +1,7 @@
 import pandas as pd
 
+### CODE USED TO STANDARDIZE FEATURES BASED ON TEXT SIZE ###
+
 #tag = "Val"
 #filename = tag + "_Features_Full.csv"
 # out_f = tag.upper() + "_FULL.csv"
