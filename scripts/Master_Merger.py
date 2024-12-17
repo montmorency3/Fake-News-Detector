@@ -1,6 +1,9 @@
 # code used to merge all the extracted dfs
 # combines Body, Title, NER information
 
+### NOT RELEVANT TO FINAL REPORT ###
+### ONLY USED TO CREATE CSV FILES ###
+
 import pandas as pd
 
 tag = "Test"
