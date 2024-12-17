@@ -1,3 +1,6 @@
+### NOT IMPORT FOR ANALYSIS ###
+### SIMPLY TO ADJUST THE DATASET IN FILES ###
+
 import pandas as pd
 
 # 1 = True, 0 = Fake
