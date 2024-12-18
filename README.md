@@ -1,4 +1,8 @@
+
+This repository contains a machine learning-based fake news classifier that distinguishes between real and fake news articles. The project leverages a combination of text-based features and statistical methods to achieve high accuracy in classification tasks. 
+
 The repository is split into 3 folders.
+
 
 1) The dataset folder contains the ISOT data.
 
@@ -18,3 +22,7 @@ The repository is split into 3 folders.
    >> feature_classifier: simple logistic regression classifier using extracted features
 
 3) The LLM_data contains the results of the API calls. Further details contained within.
+
+Acknowledgments
+ISOT Dataset creators for providing labeled fake news articles.
+Liar Dataset contributors for their comprehensive dataset of labeled statements.
