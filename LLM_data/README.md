@@ -19,10 +19,10 @@ This directory contains several files related to LLM-based processing of the ISO
 - **res_ISOT_gpt-4o.csv**
   - Contains the responses to each individual article from ISOT by GPT-4o.
 
-- **res_ISOT_o1-mini_max3x.csv**
+- **res_ISOT_o1-mini.csv**
   - Contains the responses to each individual article from ISOT by o1 with a `max_completion_tokens` parameter of 1024.
 
-- **res_ISOT_o1-mini.csv**
+- **res_ISOT_o1-mini_max3x.csv**
   - Contains the responses to each individual article from ISOT by o1 with a `max_completion_tokens` parameter of 3 times the number of tokens in the input.
 
 ## LIAR2 Dataset Files
